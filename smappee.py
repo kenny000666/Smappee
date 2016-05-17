@@ -8,7 +8,6 @@ import re
 import logging
 import paho.mqtt.publish as publish
 from ConfigParser import SafeConfigParser
-from time import sleep
 
 log = None
 
@@ -19,7 +18,7 @@ def initLogger(name):
     soh = logging.StreamHandler(sys.stdout)
     soh.setFormatter(logging.Formatter("%(asctime)s [%(levelname)s] %(message)s"))
     log.addHandler(soh)
-    log.setLevel(logging.DEBUG)
+    log.setLevel(logging.INFO)
 
 class SmappeeMQTT():
     def __init__(self):
