@@ -100,30 +100,32 @@ def main(argv=None):
     log.info("Connecting to MQTT Broker on " + host + " port " + str(port))
 
     while True:
-        smappee.run()
-        gridTopic = topic + "grid"
-        solarTopic = topic + "solar"
-        excessTopic = topic + "excess"
-
         try:
-            gridmsgs = [{"topic": gridTopic, "payload": """{ "idx" : """ + genIDX + """, "nvalue" : 0, "svalue" : \"""" + str(smappee.grid) + ";0\"}", "qos": qos, "retain": retain}]
-            publish.multiple(gridmsgs, hostname=host, port=port, client_id=client_id, auth=auth)
-        except:
-            log.warning("Unable to publish message, " + gridmsgs)
+            smappee.run()
+            gridTopic = topic + "grid"
+            solarTopic = topic + "solar"
+            excessTopic = topic + "excess"
 
-        try:
-            solarmsgs = [{"topic": solarTopic, "payload": """{ "idx" : """ +solarIDX + """, "nvalue" : 0, "svalue" : \"""" + str(smappee.solar) + ";0\"}", "qos": qos, "retain": retain}]
-            publish.multiple(solarmsgs, hostname=host, port=port, client_id=client_id, auth=auth)
-        except:
-            log.warning("Unable to publish message, " + solarmsgs)
+            try:
+                gridmsgs = [{"topic": gridTopic, "payload": """{ "idx" : """ + genIDX + """, "nvalue" : 0, "svalue" : \"""" + str(smappee.grid) + ";0\"}", "qos": qos, "retain": retain}]
+                publish.multiple(gridmsgs, hostname=host, port=port, client_id=client_id, auth=auth)
+            except:
+                log.warning("Unable to publish message, " + gridmsgs)
 
-        try:
-            excessmsgs = [{"topic": excessTopic, "payload": """{ "idx" : """ + excessIDX + """, "nvalue" : 0, "svalue" : \"""" + str(smappee.excess) + ";0\"}", "qos": qos, "retain": retain}]
-            publish.multiple(excessmsgs, hostname=host, port=port, client_id=client_id, auth=auth)
-        except:
-            log.warning("Unable to publish message, " + excessmsgs)
+            try:
+                solarmsgs = [{"topic": solarTopic, "payload": """{ "idx" : """ +solarIDX + """, "nvalue" : 0, "svalue" : \"""" + str(smappee.solar) + ";0\"}", "qos": qos, "retain": retain}]
+                publish.multiple(solarmsgs, hostname=host, port=port, client_id=client_id, auth=auth)
+            except:
+                log.warning("Unable to publish message, " + solarmsgs)
 
-        time.sleep(5)
+            try:
+                excessmsgs = [{"topic": excessTopic, "payload": """{ "idx" : """ + excessIDX + """, "nvalue" : 0, "svalue" : \"""" + str(smappee.excess) + ";0\"}", "qos": qos, "retain": retain}]
+                publish.multiple(excessmsgs, hostname=host, port=port, client_id=client_id, auth=auth)
+            except:
+                log.warning("Unable to publish message, " + excessmsgs)
+            time.sleep(5)
+        except:
+            log.error("Error updating and publishing message")
 
 if __name__ == "__main__":
     main(sys.argv)
